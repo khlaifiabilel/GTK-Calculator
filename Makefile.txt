@@ -1,0 +1,77 @@
+# =============================================================================
+# MAKEFILE FOR GTK CALCULATOR
+# =============================================================================
+# Author: khlaifiabilel
+# Date: 2025-11-20
+# 
+# This Makefile automates the compilation process for the GTK calculator
+# Usage: Simply type 'make' in the terminal
+# =============================================================================
+
+# Compiler to use
+CC = gcc
+
+# Compiler flags
+# -Wall: Enable all common warnings
+# -Wextra: Enable extra warning flags
+# -g: Add debugging information
+# -O2: Optimization level 2
+CFLAGS = -Wall -Wextra -g -O2
+
+# GTK3 flags (using pkg-config to get correct flags)
+GTK_CFLAGS = `pkg-config --cflags gtk+-3.0`
+GTK_LIBS = `pkg-config --libs gtk+-3.0`
+
+# Math library
+MATH_LIB = -lm
+
+# Source files
+SOURCES = calculator_gtk.c
+
+# Output executable name
+TARGET = calculator_gtk
+
+# Default target - builds the calculator
+all: $(TARGET)
+
+# Build rule for the calculator
+$(TARGET): $(SOURCES)
+	@echo "==================================="
+	@echo "Building GTK Calculator..."
+	@echo "==================================="
+	$(CC) $(CFLAGS) $(GTK_CFLAGS) $(SOURCES) -o $(TARGET) $(GTK_LIBS) $(MATH_LIB)
+	@echo "==================================="
+	@echo "Build complete! Run with: ./$(TARGET)"
+	@echo "==================================="
+
+# Clean rule - removes built files
+clean:
+	@echo "Cleaning up..."
+	rm -f $(TARGET)
+	rm -f *.o
+	@echo "Clean complete!"
+
+# Run the calculator
+run: $(TARGET)
+	./$(TARGET)
+
+# Install dependencies (for Ubuntu/Debian systems)
+install-deps:
+	@echo "Installing GTK3 development libraries..."
+	sudo apt-get update
+	sudo apt-get install -y libgtk-3-dev pkg-config
+
+# Help target - shows available commands
+help:
+	@echo "==================================="
+	@echo "GTK Calculator Makefile Commands:"
+	@echo "==================================="
+	@echo "make          - Build the calculator"
+	@echo "make run      - Build and run the calculator"
+	@echo "make clean    - Remove built files"
+	@echo "make install-deps - Install GTK3 dependencies (Ubuntu/Debian)"
+	@echo "make help     - Show this help message"
+	@echo "==================================="
+
+# Declare phony targets (targets that don't create files)
+.PHONY: all clean run install-deps help
